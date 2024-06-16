@@ -1,12 +1,13 @@
 width = 240;
-baseHeight = 3;
+baseHeight = 5;
 wallHeight = 40;
 height = baseHeight + wallHeight;
-wallThickness = 5;
+wallThickness = 10;
 
-stand([20, 20, 20, 20, 30, 30], [0, 25, 50, 75, 105, 140]);
+stand([20, 20, 20, 20, 30, 30], [0, 30, 60, 90, 125, 165]);
 
 module stand(laptopThicknesses, offsets) {
+    offset = 0;
     for (i = [0 : len(laptopThicknesses) - 1]) {
         translate([0, offsets[i], 0]) {
             offset = offset + laptopThicknesses[i];
@@ -44,11 +45,22 @@ module rightWall(laptopThickness) {
 }
 
 module wall() {
-    intersection() {
-        cube([width, wallThickness, height], center = true);
-        translate([0, 0, -width * 0.94 + 0.25]) {
-            rotate([90, 0, 0,]) {
-                cylinder(r = width, h = wallThickness, center=true, $fn = 3000);
+    cornerRadius = 15;
+    translate([0, 0, -7.5]) { 
+        union() {
+            cube([width, wallThickness, height - cornerRadius], center = true);
+            translate([0, 0, height / 2]) {
+                cube([width - cornerRadius * 2, wallThickness, cornerRadius], center = true);
+            }
+            translate([width / 2 - cornerRadius, 0, (height - cornerRadius) / 2]) {
+                rotate([90, 0, 0,]) {
+                    cylinder(r = cornerRadius, h = wallThickness, center=true, $fn = 2000);
+                }
+            }
+            translate([-width / 2 + cornerRadius, 0, (height - cornerRadius) / 2]) {
+                rotate([90, 0, 0,]) {
+                    cylinder(r = cornerRadius, h = wallThickness, center=true, $fn = 2000);
+                }
             }
         }
     }
